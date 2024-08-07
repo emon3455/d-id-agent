@@ -17,8 +17,8 @@ let sessionClientAnswer;
 let statsIntervalId;
 let videoIsPlaying;
 let lastBytesReceived;
-let agentId;
-let chatId;
+let agentId="agt_6SZnw-76";
+let chatId="cht_p3XzBK_YhdXz3PE0BGuuO";
 
 const videoElement = document.getElementById('video-element');
 videoElement.setAttribute('playsinline', '');
@@ -517,24 +517,31 @@ async function agentsAPIworkflow() {
   return { agentId: agentId, chatId: chatId };
 }
 
+// const agentsRun = async () => {
+//   try {
+//     const agentsIds = ({} = await agentsAPIworkflow());
+//     console.log(agentsIds);
+//     agentId = agentsIds.agentId;
+//     chatId = agentsIds.chatId;
+//     console.log("Needed agentId:", agentId);
+//     console.log("Needed chatId:", chatId);
+    
+//     loadingContainer.innerHTML = 'Loading...';
+//     connection();
+//     return;
+//   } catch (err) {
+//     agentIdLabel.innerHTML = `<span style='color:red'>Failed</span>`;
+//     chatIdLabel.innerHTML = `<span style='color:red'>Failed</span>`;
+//     alert('Connection Failed');
+//     throw new Error(err);
+//   }
+// };
+// agentsRun();
+
 const agentsRun = async () => {
-  try {
-    const agentsIds = ({} = await agentsAPIworkflow());
-    console.log(agentsIds);
-    agentId = agentsIds.agentId;
-    chatId = agentsIds.chatId;
-    loadingContainer.innerHTML = 'Loading...';
-    connection();
-    return;
-  } catch (err) {
-    agentIdLabel.innerHTML = `<span style='color:red'>Failed</span>`;
-    chatIdLabel.innerHTML = `<span style='color:red'>Failed</span>`;
-    alert('Connection Failed');
-    throw new Error(err);
-  }
+  agentId: 'agt_6SZnw-76';
+  chatId: 'cht_p3XzBK_YhdXz3PE0BGuuO';
+  loadingContainer.innerHTML = 'Loading...';
+  connection();
 };
 agentsRun();
-
-// Paste Your Created Agent and Chat IDs Here:
-agentId = '';
-chatId = '';
