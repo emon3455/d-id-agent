@@ -78,6 +78,12 @@ body * {
   margin-top: 50px;
 }
 
+.container-xl{
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #171744;
+}
+
 #buttons {
   clear: both;
   padding: 0 0 0 0;
@@ -98,7 +104,7 @@ button#connect-button {
 background-color: green;
 }
 button#destroy-button{
-  background-color: red;
+  background-color: #1d1d50;
 }
 
 button#start-button{
@@ -116,15 +122,21 @@ h4{
   margin-bottom: 10px;
 }
 
-textarea {
+textarea, input {
   font-size: 16px;
-  text-align: center;
-  width: 500px;
+  text-align: left;
+  width:100%;
   border-radius: 5px;
-  padding: 10px 20px;
-  border: 2px solid #7459fe;
+  padding: 10px;
+  border: 2px solid #8A879D;
   font-size: 16px;
-  margin: 0 5px;
+  margin: 2px;
+  background: #171744;
+  color: white;
+}
+
+.width-100{
+  width: 100%;
 }
 
 #msgHistory {
@@ -146,8 +158,8 @@ textarea {
 
 #video-wrapper {
   /* height: 500px; */
-  width: 400px;
-  height: 400px;
+  width: 100%;
+  height: 100%;
   background-position: top;
 }
 
@@ -167,6 +179,50 @@ video {
 
 .animated {
   animation: opacityAnimation 0.2s ease-in-out;
+}
+
+
+.flex-2{
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin: 5px;
+}
+
+.card {
+  background-color: #1d1d50; /* Background color of the card */
+  border: 1px solid #221869; /* Light border around the card */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  padding: 16px; /* Padding inside the card */
+  margin: 16px; /* Margin outside the card */
+  transition: box-shadow 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.card:hover {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Slightly larger shadow on hover */
+}
+
+.statusContainer{
+  font-size: 40px;
+  text-align: center;
+  margin: 10px;
+  color: white;
+  font-weight: 700;
+}
+
+.hide{
+  display: none;
+}
+
+.center{
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @keyframes opacityAnimation {
