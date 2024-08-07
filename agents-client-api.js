@@ -370,9 +370,9 @@ inputText.addEventListener('keydown', async (event) => {
           ).innerHTML += `<span style='opacity:0.5'> ${playResponseData.result}</span><br>`;
         }
       }
-    } else if (loadingContainer.innerHTML === 'Removing Connection' || 'Connection Closed' ) {
+    } else if (loadingContainer.innerHTML === 'Removing Connection' || 'Connection Closed') {
       alert('Connection closed please refresh the page and try again!.');
-    } else if(loadingContainer.innerHTML === 'Loading...'){
+    } else if (loadingContainer.innerHTML === 'Loading...') {
       alert('Connecting please wait and try again later!.');
     }
   }
@@ -393,8 +393,8 @@ destroyButton.onclick = async () => {
   stopAllStreams();
   closePC();
   loadingContainer.innerHTML = 'Connection Closed';
-  // Navigate to another page
-  window.location.href = 'http://localhost:3000';
+  // Navigate to home page
+  window.location.href = 'https://nyestatelaw.ai/';
 };
 
 // Agents API Workflow

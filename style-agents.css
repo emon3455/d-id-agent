@@ -126,13 +126,17 @@ textarea, input {
   font-size: 16px;
   text-align: left;
   width:100%;
-  border-radius: 5px;
-  padding: 10px;
+  border-radius: 10px;
+  padding: 5px;
   border: 2px solid #8A879D;
   font-size: 16px;
-  margin: 2px;
   background: #171744;
   color: white;
+  margin-bottom: 20px;
+}
+
+input {
+  padding: 15px 5px;
 }
 
 .width-100{
@@ -194,7 +198,7 @@ video {
 .card {
   background-color: #1d1d50; /* Background color of the card */
   border: 1px solid #221869; /* Light border around the card */
-  border-radius: 8px; /* Rounded corners */
+  border-radius: 20px; /* Rounded corners */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
   padding: 16px; /* Padding inside the card */
   margin: 16px; /* Margin outside the card */
@@ -225,7 +229,24 @@ video {
   align-items: center;
 }
 
+.chat-header{
+  font-size: 36px;
+  color: white;
+  font-weight: 800;
+  text-align: left;
+  margin: 5px 0;
+}
+
 @keyframes opacityAnimation {
 from { opacity: 0.8; }
 to { opacity: 1; }
+}
+
+@media (max-width: 700px) {
+  .flex-2 {
+    flex-direction: column-reverse;
+  }
+  .statusContainer, .chat-header{
+    font-size: 24px;
+  }
 }

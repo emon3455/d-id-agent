@@ -12,10 +12,7 @@ app.use('/', express.static(__dirname));
 app.get('/', function(req, res) {
     res.sendFile(__dirname + '/index.html')
 });
-app.get('/agents', function(req, res) {
-    res.sendFile(__dirname + '/index-agents.html')
-});
 
 const server = http.createServer(app);
 
-server.listen(port, () => console.log(`Server started on port localhost:${port}\nhttp://localhost:${port}\nhttp://localhost:${port}/agents`));
+server.listen(port, () => console.log(`Server started on port ${port}\nhttp://localhost:${port}`));
