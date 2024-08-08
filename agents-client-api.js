@@ -17,8 +17,8 @@ let sessionClientAnswer;
 let statsIntervalId;
 let videoIsPlaying;
 let lastBytesReceived;
-let agentId="agt_6SZnw-76";
-let chatId="cht_p3XzBK_YhdXz3PE0BGuuO";
+let agentId = 'agt_RfGI6bMQ';
+let chatId = 'cht_F_4AGgUdvygCWVHohLOOp';
 
 const videoElement = document.getElementById('video-element');
 videoElement.setAttribute('playsinline', '');
@@ -86,7 +86,8 @@ async function createPeerConnection(offer, iceServers) {
     if (msg.includes(msgType)) {
       msg = decodeURIComponent(msg.replace(msgType, ''));
       console.log(msg);
-      outputText.value = `${msg}`;
+      // outputText.value = `${msg}`;
+      addAgentMessage(`${msg}`);
       decodedMsg = msg;
       return decodedMsg;
     }
@@ -339,6 +340,7 @@ inputText.addEventListener('keydown', async (event) => {
 
         // Storing the Text Area value
         let txtAreaValue = document.getElementById('inputText').value;
+        addUserMessage(txtAreaValue);
 
         // Clearing the text-box element
         document.getElementById('inputText').value = '';
@@ -525,7 +527,7 @@ async function agentsAPIworkflow() {
 //     chatId = agentsIds.chatId;
 //     console.log("Needed agentId:", agentId);
 //     console.log("Needed chatId:", chatId);
-    
+
 //     loadingContainer.innerHTML = 'Loading...';
 //     connection();
 //     return;
@@ -545,3 +547,50 @@ const agentsRun = async () => {
   connection();
 };
 agentsRun();
+
+let messages = [];
+
+const chatContainer = document.getElementById('chat-container');
+
+// Function to create a message bubble
+function createMessageElement(content, type) {
+  const messageContainer = document.createElement('div');
+  messageContainer.classList.add('message-container', type);
+
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message');
+  messageElement.textContent = content;
+
+  messageContainer.appendChild(messageElement);
+  return messageContainer;
+}
+
+// Function to render messages
+function renderMessages() {
+  chatContainer.innerHTML = ''; // Clear existing messages
+  messages.forEach(({ user, agent }) => {
+    const userMessageElement = createMessageElement(user, 'user-message');
+    chatContainer.appendChild(userMessageElement);
+
+    const agentMessageElement = createMessageElement(agent, 'agent-message');
+    chatContainer.appendChild(agentMessageElement);
+  });
+  chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to the latest message
+}
+
+// Function to add a new user message
+function addUserMessage(userMessage) {
+  // Add the user's message first
+  messages.push({ user: userMessage, agent: 'Thinking...' });
+  renderMessages();
+}
+
+// Function to add a new agent response
+function addAgentMessage(agentMessage) {
+  messages[messages.length - 1].agent = agentMessage;
+  renderMessages();
+}
+
+
+// Initial render of messages
+renderMessages();

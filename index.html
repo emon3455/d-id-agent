@@ -36,13 +36,15 @@
             <div id="msgHistory"></div>
           </div>
         </div>
+
         <div class="" id="mainContent">
           <div class="card">
             <h2 class="chat-header">Chat Window</h2>
             <div class="flex-2">
               <div class="width-100">
-                <textarea id="outputText" cols="70" rows="8" placeholder="status"></textarea>
-                <br />
+                <div class="chat-container" id="chat-container">
+                  <!-- Messages will be dynamically inserted here -->
+                </div>
                 <input type="text" id="inputText" placeholder="Prompt" />
               </div>
               <div id="video-wrapper">

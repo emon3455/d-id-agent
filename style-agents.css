@@ -136,7 +136,7 @@ textarea, input {
 }
 
 input {
-  padding: 15px 5px;
+  padding: 15px 7px;
 }
 
 .width-100{
@@ -196,6 +196,7 @@ video {
 }
 
 .card {
+  min-width: 60vw;
   background-color: #1d1d50; /* Background color of the card */
   border: 1px solid #221869; /* Light border around the card */
   border-radius: 20px; /* Rounded corners */
@@ -235,6 +236,59 @@ video {
   font-weight: 800;
   text-align: left;
   margin: 5px 0;
+}
+
+.chat-container {
+  width: 100%;
+  height: 350px;
+  overflow-y: auto;
+  margin: 20px auto;
+  padding: 10px;
+  background: #171744;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+/* Hide scrollbar but keep scroll behavior */
+.chat-container::-webkit-scrollbar {
+  width: 0; /* Hide scrollbar */
+}
+
+.chat-container {
+  scrollbar-width: none; /* For Firefox: hide scrollbar */
+}
+
+.message-container {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.user-message {
+  justify-content: flex-end;
+}
+
+.agent-message {
+  justify-content: flex-start;
+}
+
+.message {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 20px;
+  font-size: 16px;
+}
+
+.user-message .message {
+  background-color: #007bff;
+  color: #fff;
+  border-bottom-right-radius: 0;
+}
+
+.agent-message .message {
+  background-color: #e9ecef;
+  color: #333;
+  border-bottom-left-radius: 0;
 }
 
 @keyframes opacityAnimation {
