@@ -17,8 +17,8 @@ let sessionClientAnswer;
 let statsIntervalId;
 let videoIsPlaying;
 let lastBytesReceived;
-let agentId = 'agt_RfGI6bMQ';
-let chatId = 'cht_F_4AGgUdvygCWVHohLOOp';
+let agentId = 'agt_eZWV30yA';
+let chatId = 'cht_MEXHC3q48PLXsjYAUei1_';
 
 const videoElement = document.getElementById('video-element');
 videoElement.setAttribute('playsinline', '');
@@ -541,8 +541,6 @@ async function agentsAPIworkflow() {
 // agentsRun();
 
 const agentsRun = async () => {
-  agentId: 'agt_6SZnw-76';
-  chatId: 'cht_p3XzBK_YhdXz3PE0BGuuO';
   loadingContainer.innerHTML = 'Loading...';
   connection();
 };

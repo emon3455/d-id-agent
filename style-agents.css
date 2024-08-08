@@ -197,6 +197,9 @@ video {
 
 .card {
   min-width: 60vw;
+  max-width: 98vw;
+  width: 100%;
+  margin: 0 auto;
   background-color: #1d1d50; /* Background color of the card */
   border: 1px solid #221869; /* Light border around the card */
   border-radius: 20px; /* Rounded corners */
@@ -296,7 +299,7 @@ from { opacity: 0.8; }
 to { opacity: 1; }
 }
 
-@media (max-width: 700px) {
+@media (max-width: 800px) {
   .flex-2 {
     flex-direction: column-reverse;
   }
