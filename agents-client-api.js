@@ -17,8 +17,9 @@ let sessionClientAnswer;
 let statsIntervalId;
 let videoIsPlaying;
 let lastBytesReceived;
-let agentId = 'agt_eZWV30yA';
-let chatId = 'cht_MEXHC3q48PLXsjYAUei1_';
+let agentId = 'agt_8t7Un5nQ';
+let chatId = 'cht_oHkGQ11NJgHx9Mr4FFEya';
+
 
 const videoElement = document.getElementById('video-element');
 videoElement.setAttribute('playsinline', '');
