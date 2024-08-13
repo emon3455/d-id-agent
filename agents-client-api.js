@@ -17,8 +17,8 @@ let sessionClientAnswer;
 let statsIntervalId;
 let videoIsPlaying;
 let lastBytesReceived;
-let agentId = 'agt_8t7Un5nQ';
-let chatId = 'cht_oHkGQ11NJgHx9Mr4FFEya';
+let agentId;
+let chatId;
 
 
 const videoElement = document.getElementById('video-element');
@@ -136,6 +136,108 @@ async function langflowAiBot(input) {
   return output.message.text;
 }
 
+// Function to poll the status of video generation
+async function pollVideoStatus(videoId, interval = 5000) {
+  const url = `https://api.d-id.com/talks/${videoId}`;
+  const headers = {
+    Authorization: `Basic ${DID_API.key}`,
+    'Content-Type': 'application/json',
+  };
+
+  return new Promise((resolve, reject) => {
+    const checkStatus = async () => {
+      try {
+        const response = await fetch(url, { headers });
+        if (!response.ok) {
+          throw new Error(`Failed to fetch status: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        console.log('Video Status:', data.status);
+
+        if (data.status === 'done') {
+          resolve(data.result_url);
+        } else if (data.status === 'error') {
+          reject('Error in video generation.');
+        } else {
+          setTimeout(checkStatus, interval);
+        }
+      } catch (error) {
+        reject(error.message);
+      }
+    };
+
+    checkStatus();
+  });
+}
+
+// inputText.addEventListener('keydown', async (event) => {
+//   if (event.key === 'Enter') {
+//     event.preventDefault();
+
+//     addUserMessage(inputText.value);
+//     addAgentMessage("Thinking...");
+
+//     const resp = await langflowAiBot(inputText.value);
+//     console.log(resp);
+
+//     inputText.value = "";
+
+//     if (resp) {
+//       try {
+//         const payload = {
+//           script: {
+//             type: "text",
+//             input: resp
+//           },
+//           source_url: "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg",
+//           clips: {
+//             presenter_id: "rian-lZC6MmWfC1",
+//             driver_id: "mXra4jY38i"
+//           }
+//         };
+
+//         const response = await fetch('https://api.d-id.com/talks', {
+//           method: 'POST',
+//           headers: {
+//             Authorization: `Basic ${DID_API.key}`,
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify(payload),
+//         });
+
+//         if (response.ok) {
+//           const data = await response.json();
+//           if (data.id) {
+//             const outputResponse = await fetch(`https://api.d-id.com/talks/${data.id}`, {
+//               headers: {
+//                 Authorization: `Basic ${DID_API.key}`,
+//                 'Content-Type': 'application/json',
+//               },
+//             });
+
+//             if (outputResponse.ok) {
+//               const output = await outputResponse.json();
+//               console.log(output);
+//               videoElement.src = output.result_url;
+//               addAgentMessage(resp);
+//             } else {
+//               alert('Error:', outputResponse.statusText);
+//             }
+//           }
+//         } else {
+//           alert('Error:', response.statusText);
+//         }
+
+//       } catch (error) {
+//         alert('Error:', error.message);
+//       }
+//     }
+//   }
+// });
+
+
+// Event listener for the input text
 inputText.addEventListener('keydown', async (event) => {
   if (event.key === 'Enter') {
     event.preventDefault();
@@ -174,20 +276,12 @@ inputText.addEventListener('keydown', async (event) => {
         if (response.ok) {
           const data = await response.json();
           if (data.id) {
-            const outputResponse = await fetch(`https://api.d-id.com/talks/${data.id}`, {
-              headers: {
-                Authorization: `Basic ${DID_API.key}`,
-                'Content-Type': 'application/json',
-              },
-            });
-
-            if (outputResponse.ok) {
-              const output = await outputResponse.json();
-              console.log(output);
-              videoElement.src = output.result_url;
+            try {
+              const resultUrl = await pollVideoStatus(data.id);
+              videoElement.src = resultUrl;
               addAgentMessage(resp);
-            } else {
-              alert('Error:', outputResponse.statusText);
+            } catch (error) {
+              alert('Error:', error);
             }
           }
         } else {
@@ -200,6 +294,7 @@ inputText.addEventListener('keydown', async (event) => {
     }
   }
 });
+
 
 const destroyButton = document.getElementById('destroy-button');
 destroyButton.onclick = () => {
