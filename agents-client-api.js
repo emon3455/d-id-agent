@@ -4,6 +4,23 @@ const DID_API = await fetchJsonFile.json()
 
 if (DID_API.key == '🤫') alert('Please put your api key inside ./api.json and restart..');
 
+const RTCPeerConnection = (
+  window.RTCPeerConnection ||
+  window.webkitRTCPeerConnection ||
+  window.mozRTCPeerConnection
+).bind(window);
+
+let peerConnection;
+let streamId;
+let sessionId;
+let sessionClientAnswer;
+let statsIntervalId;
+let videoIsPlaying;
+let lastBytesReceived;
+let agentId = 'agt_8t7Un5nQ';
+let chatId = 'cht_oHkGQ11NJgHx9Mr4FFEya';
+
+
 const videoElement = document.getElementById('video-element');
 const inputText = document.getElementById('inputText');
 const loadingContainer = document.getElementById('loadingContainer');
