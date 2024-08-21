@@ -4,26 +4,49 @@ const DID_API = await fetchJsonFile.json()
 
 if (DID_API.key == '🤫') alert('Please put your api key inside ./api.json and restart..');
 
-const RTCPeerConnection = (
-  window.RTCPeerConnection ||
-  window.webkitRTCPeerConnection ||
-  window.mozRTCPeerConnection
-).bind(window);
-
-let peerConnection;
-let streamId;
-let sessionId;
-let sessionClientAnswer;
-let statsIntervalId;
-let videoIsPlaying;
-let lastBytesReceived;
-let agentId;
-let chatId;
-
 
 const videoElement = document.getElementById('video-element');
 const inputText = document.getElementById('inputText');
 const loadingContainer = document.getElementById('loadingContainer');
+const voiceIcon = document.getElementById('voiceIcon');
+const send = document.getElementById('send');
+let isRecording = false;
+
+if ('webkitSpeechRecognition' in window) {
+  const recognition = new webkitSpeechRecognition();
+  recognition.continuous = false;
+  recognition.interimResults = false;
+  recognition.lang = 'en-US';
+
+  voiceIcon.addEventListener('click', () => {
+    if (isRecording) {
+      recognition.stop();
+    } else {
+      recognition.start();
+    }
+  });
+
+  recognition.onstart = () => {
+    isRecording = true;
+    voiceIcon.textContent = '🛑';
+  };
+
+  recognition.onresult = (event) => {
+    const speechResult = event.results[0][0].transcript;
+    inputText.value = speechResult;
+  };
+
+  recognition.onerror = (event) => {
+    console.error('Speech recognition error:', event.error);
+  };
+
+  recognition.onend = () => {
+    isRecording = false;
+    voiceIcon.textContent = '🎤';
+  };
+} else {
+  alert('Speech recognition not supported in this browser.');
+}
 
 
 class LangflowClient {
@@ -171,129 +194,75 @@ async function pollVideoStatus(videoId, interval = 5000) {
   });
 }
 
-// inputText.addEventListener('keydown', async (event) => {
-//   if (event.key === 'Enter') {
-//     event.preventDefault();
+send.onclick = async (e) => {
+  e.preventDefault();  // Prevent the default button action
+  await sendMessage(e);  // Call the sendMessage function
+};
 
-//     addUserMessage(inputText.value);
-//     addAgentMessage("Thinking...");
-
-//     const resp = await langflowAiBot(inputText.value);
-//     console.log(resp);
-
-//     inputText.value = "";
-
-//     if (resp) {
-//       try {
-//         const payload = {
-//           script: {
-//             type: "text",
-//             input: resp
-//           },
-//           source_url: "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg",
-//           clips: {
-//             presenter_id: "rian-lZC6MmWfC1",
-//             driver_id: "mXra4jY38i"
-//           }
-//         };
-
-//         const response = await fetch('https://api.d-id.com/talks', {
-//           method: 'POST',
-//           headers: {
-//             Authorization: `Basic ${DID_API.key}`,
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify(payload),
-//         });
-
-//         if (response.ok) {
-//           const data = await response.json();
-//           if (data.id) {
-//             const outputResponse = await fetch(`https://api.d-id.com/talks/${data.id}`, {
-//               headers: {
-//                 Authorization: `Basic ${DID_API.key}`,
-//                 'Content-Type': 'application/json',
-//               },
-//             });
-
-//             if (outputResponse.ok) {
-//               const output = await outputResponse.json();
-//               console.log(output);
-//               videoElement.src = output.result_url;
-//               addAgentMessage(resp);
-//             } else {
-//               alert('Error:', outputResponse.statusText);
-//             }
-//           }
-//         } else {
-//           alert('Error:', response.statusText);
-//         }
-
-//       } catch (error) {
-//         alert('Error:', error.message);
-//       }
-//     }
-//   }
-// });
-
-
-// Event listener for the input text
-inputText.addEventListener('keydown', async (event) => {
-  if (event.key === 'Enter') {
-    event.preventDefault();
-
-    addUserMessage(inputText.value);
-    addAgentMessage("Thinking...");
-
-    const resp = await langflowAiBot(inputText.value);
-    console.log(resp);
-
-    inputText.value = "";
-
-    if (resp) {
-      try {
-        const payload = {
-          script: {
-            type: "text",
-            input: resp
-          },
-          source_url: "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg",
-          clips: {
-            presenter_id: "rian-lZC6MmWfC1",
-            driver_id: "mXra4jY38i"
-          }
-        };
-
-        const response = await fetch('https://api.d-id.com/talks', {
-          method: 'POST',
-          headers: {
-            Authorization: `Basic ${DID_API.key}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(payload),
-        });
-
-        if (response.ok) {
-          const data = await response.json();
-          if (data.id) {
-            try {
-              const resultUrl = await pollVideoStatus(data.id);
-              videoElement.src = resultUrl;
-              addAgentMessage(resp);
-            } catch (error) {
-              alert('Error:', error);
-            }
-          }
-        } else {
-          alert('Error:', response.statusText);
-        }
-
-      } catch (error) {
-        alert('Error:', error.message);
-      }
-    }
+// Event listener for input text (to also handle Enter key submission)
+inputText.addEventListener('keypress', async (e) => {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    await sendMessage(e);
   }
 });
+
+async function sendMessage(e) {
+  // Add this line to ensure the function doesn't run if the input is empty
+  if (!inputText.value.trim()) return;
+
+  addUserMessage(inputText.value);
+  addAgentMessage("Thinking...");
+
+  const resp = await langflowAiBot(inputText.value);
+  console.log(resp);
+
+  inputText.value = "";
+
+  if (resp) {
+    try {
+      const payload = {
+        script: {
+          type: "text",
+          input: resp
+        },
+        source_url: "https://create-images-results.d-id.com/DefaultPresenters/Emma_f/v1_image.jpeg",
+        clips: {
+          presenter_id: "rian-lZC6MmWfC1",
+          driver_id: "mXra4jY38i"
+        }
+      };
+
+      const response = await fetch('https://api.d-id.com/talks', {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${DID_API.key}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.id) {
+          try {
+            const resultUrl = await pollVideoStatus(data.id);
+            videoElement.src = resultUrl;
+            addAgentMessage(resp);
+          } catch (error) {
+            alert('Error:', error);
+          }
+        }
+      } else {
+        alert('Error:', response.statusText);
+      }
+
+    } catch (error) {
+      alert('Error:', error.message);
+    }
+  }
+}
+
 
 
 const destroyButton = document.getElementById('destroy-button');
